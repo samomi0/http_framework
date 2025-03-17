@@ -23,6 +23,8 @@ else()
   message(STATUS "Release build.")
 endif()
 
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 find_package(Boost REQUIRED COMPONENTS system)
 find_package(spdlog REQUIRED)
 find_package(fmt REQUIRED)
