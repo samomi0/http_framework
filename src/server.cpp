@@ -1,12 +1,10 @@
 #include "http_framework/server.hpp"
-
-
-#include <spdlog/spdlog.h>
+#include "LumosLog.hpp"
 
 namespace http_framework {
 
 void Server::start(unsigned short port, Router router) {
-  spdlog::info("Starting server");
+  LumosLog::log(LumosLog::LogLevel::INFO, "Server", "Starting server");
   listener_ = std::make_unique<Listener>(io_context_, port, router_);
   listener_->start();
   io_context_.run();
@@ -17,6 +15,6 @@ void Server::stop() {
     listener_->stop();
   }
   io_context_.stop();
-  spdlog::info("Server stopped");
+  LumosLog::log(LumosLog::LogLevel::INFO, "Server", "Server stopped");
 }
 }  // namespace http_framework

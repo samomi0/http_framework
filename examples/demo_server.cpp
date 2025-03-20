@@ -1,14 +1,10 @@
 #include "http_framework/router.hpp"
 #include "http_framework/server.hpp"
 
-#include <spdlog/fmt/ostr.h>
-#include "spdlog/sinks/stdout_color_sinks.h"
-#include <spdlog/spdlog.h>
+#include "LogAdapter.hpp"
 
 int main() {
-  spdlog::stdout_color_mt("http_framework");
-  spdlog::set_pattern("[%Y-%m-%d %T.%e] [%^%l%$] [PID:%P] [TID:%t] %v");
-  spdlog::set_level(spdlog::level::debug);
+  initLumosLog();
 
   http_framework::Router router;
   router.get("/hello", [](const auto& req) {

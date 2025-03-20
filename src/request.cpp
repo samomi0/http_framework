@@ -4,8 +4,12 @@
 #include <boost/asio/read_until.hpp>
 #include <boost/asio/streambuf.hpp>
 
+#include "LumosLog.hpp"
+
 namespace http_framework {
 boost::asio::awaitable<Request> Request::parse(boost::asio::ip::tcp::socket& socket) {
+  LumosLog::log(LumosLog::LogLevel::DEBUG, "Request", "start parsing request");
+
   boost::asio::streambuf buf;
 
   co_await boost::asio::async_read_until(socket, buf, "\r\n\r\n", boost::asio::use_awaitable);
@@ -44,6 +48,23 @@ boost::asio::awaitable<Request> Request::parse(boost::asio::ip::tcp::socket& soc
       std::ostringstream body_stream;
       body_stream << &buf;
       req.body_ = body_stream.str();
+    }
+    
+    auto number_of_characters_to_record = 32;
+    if (number_of_characters_to_record > req.body().size()) {
+      number_of_characters_to_record = req.body().size();
+    }
+    if (number_of_characters_to_record > 0) {
+      std::string printable_message;
+      for (int i = 0; i < number_of_characters_to_record; i++) {
+        char ch = req.body()[i];
+        if (ch < ' ' || ch > '~') {
+          printable_message.push_back('.');
+        } else {
+          printable_message.push_back(ch);
+        }
+      }
+      LumosLog::log(LumosLog::LogLevel::DEBUG, "Request", "The first {} characters:'{}'", number_of_characters_to_record, printable_message);
     }
   }
 
