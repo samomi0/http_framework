@@ -15,11 +15,5 @@ jobs:
       - name: Create default profile
         run: conan profile detect
 
-      - name: Conan Install
-        run: conan install . --output-folder=. --build=missing -s compiler.cppstd=20
-
-      - name: Configure CMake
-        run: cmake -B ${{github.workspace}}/build -DCMAKE_TOOLCHAIN_FILE=Release/generators/conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release
-
-      - name: Build
-        run: cmake --build ${{github.workspace}}/build
+      - name: Conan Build
+        run: conan build .
