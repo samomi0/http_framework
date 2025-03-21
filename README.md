@@ -5,5 +5,5 @@
 ### how to build (example on MacOS)
 
 ~~~
-conan build .
+conan build . --build=missing
 ~~~
